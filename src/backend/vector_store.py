@@ -25,18 +25,30 @@ class ChromaDB():
             persist_directory="./chroma_db"
         ))
 
-        self.delete_collection_if_exists("supreme_court_rag")
+        # gets removed in prod
+        # self.delete_collection_if_exists("supreme_court_rag")
 
-        self.collection = self.client.create_collection(
-            name=collection_name,
-            metadata={"description": description}
-        )
+        self.collection = self.get_or_create_collection(collection_name, description)
 
         self.openai_embedder = embedding_functions.OpenAIEmbeddingFunction(
             api_key=openai.api_key,
             model_name=embedding_model
         )
 
+    def get_or_create_collection(self, collection, description):
+
+        existing_cols = {col.name for col in self.client.list_collections()}
+
+        if collection in existing_cols:
+            print(f"Fetching existing collection: {collection}")
+            return self.client.get_collection(collection)
+
+        print(f"Creating new collection: {collection}")
+        return self.client.create_collection(name=collection, metadata={"description": description})
+
+
+
+    ### not to be used regularly, just during dev. for prod, this method will be removed
     def delete_collection_if_exists(self, collection_name):
         try:
             self.client.delete_collection(collection_name)

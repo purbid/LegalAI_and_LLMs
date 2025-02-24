@@ -3,7 +3,7 @@ import os
 import sys
 sys.path.append('/Users/purbidbambroo/PycharmProjects/LLMs/LegalAI_and_LLMs')
 
-from src.backend.chromadb import ChromaDB
+from src.backend.vector_store import ChromaDB
 
 
 
@@ -34,39 +34,6 @@ def read_files(docs_path = "data/UK-train-set"):
 docs_folder = "data/UK-train-set"
 doc_chunks_for_ingestion = read_files()
 
-
-
 ### init an object with default names and models
 chroma_obj = ChromaDB()
 chroma_obj.populate(doc_chunks_for_ingestion)
-
-
-
-
-# for file_path in os.listdir(docs_folder):
-#     with open(os.path.join(docs_folder, file_path), "r") as f:
-#         lines = f.readlines()
-#     for doc_line, line in enumerate(lines):
-#         parts = line.strip().split("\t")
-#         if len(parts) != 2:  ### check why this happened
-#             continue
-#         text, role = parts
-#         print(text, role)
-#         embedding = get_embedding(text)
-#
-#         #### 15_1 is line 1 on doc 15. Good identifier.
-#         line_id = f"doc{doc_num}_line{doc_line}"
-#
-#         collection.add(
-#             documents=[text],
-#             embeddings=[embedding],
-#             metadatas=[{
-#                 "rhetorical_role": role,
-#                 "document_id": f"doc_{doc_num}",
-#                 "line_number": doc_line
-#             }],
-#             ids=[line_id]
-#         )
-#     doc_num += 1
-#
-# client.persist()
