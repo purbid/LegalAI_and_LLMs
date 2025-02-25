@@ -42,6 +42,10 @@ generation_prompt_rag = PromptTemplate(
         """
 )
 
+
+
+#### these methods not being used with langchain
+
 def build_prompt_for_generation(question: str, retrieved_lines: list):
     """
     Here we will build a prompt from the given question.
